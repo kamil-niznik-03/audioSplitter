@@ -1,5 +1,7 @@
 import pydub
 import os
+import csv
+import pandas
 
 def minutesToMilliseconds(minutes, seconds):
     return ((minutes * 60) + seconds) * 1000
@@ -8,37 +10,41 @@ def main():
     fullSetPath = "C:\\Users\\kamil\\OneDrive\\Music\\Martin Garrix - Ultra 2024 (Full Set)\\MARTIN GARRIX LIVE @ ULTRA MUSIC FESTIVAL MIAMI 2024.wav"
     fullSet = pydub.AudioSegment.from_wav(fullSetPath)
 
-    trimTimings = [
-        {"start": (0, 0), "end": (2, 19), "title": "Martin Garrix & DubVision feat. Jaimes - Empty (Intro Edit)"},
-        {"start": (2, 20), "end": (3, 49), "title": "ID - ID"},
-        {"start": (3, 50), "end": (5, 19), "title": "Martin Garrix & Matisse & Sadko - Good Morning"},
-        {"start": (5, 20), "end": (8, 46), "title": "Martin Garrix & MOTI - Virus"},
-        {"start": (8, 47), "end": (11, 38), "title": "Eleganto - Express Yourself (ID)"},
-        {"start": (11, 39), "end": (12, 53), "title": "070 Shakes - Cocoon (Martin Garrix & Space Ducks Remix)"},
-        {"start": (12, 54), "end": (14, 44), "title": "Martin Garrix & Third Party - Lions In The Wild"},
-        {"start": (14, 45), "end": (16, 29), "title": "Martin Garrix & Sentinal feat. Bonn vs Avicii - Hurricane vs Fade Into Darkness (Martin Garrix Mashup)"},
-        {"start": (16, 30), "end": (18, 6), "title": "Martin Garrix & Third Party - Something To Believe In (ID)"},
-        {"start": (18, 7), "end": (21, 45), "title": "Lewis Capaldi - Someone You Loved (Martin Garrix Remix)"},
-        {"start": (21, 46), "end": (24, 36), "title": "Martin Garrix & Mesto feat. WILHELM - Breakaway"},
-        {"start": (24, 37), "end": (26, 21), "title": "Martin Garrix & Zedd - Follow"},
-        {"start": (26, 22), "end": (28, 59), "title": "AREA21 - Drinks Up (ID)"},
-        {"start": (29, 0), "end": (31, 25), "title": "ALOK & The Chainsmokers ft. Mae Stephens vs Martin Garrix & Dua Lipa - Jungle (Arcando Remix) vs Scared To Be Lonely (Martin Garrix Mashup)"},
-        {"start": (31, 26), "end": (32, 35), "title": "Martin Garrix & Mesto - Limitless"},
-        {"start": (32, 36), "end": (34, 56), "title": "Avicii - Waiting For Love"},
-        {"start": (34, 57), "end": (36, 33), "title": "Martin Garrix & DubVision feat. Shaun Farrugia - Starlight (Keep Me Afloat)"},
-        {"start": (36, 34), "end": (40, 27), "title": "Martin Garrix feat. Bonn - High On Life"},
-        {"start": (40, 28), "end": (42, 41), "title": "Dimitri Vegas, Martin Garrix, Like Mike - Tremor"},
-        {"start": (42, 42), "end": (44, 55), "title": "Martin Garrix & Sem Vox - Gravity"},
-        {"start": (44, 56), "end": (46, 17), "title": "Martin Garrix - Animals"},
-        {"start": (46, 18), "end": (48, 50), "title": "Martin Garrix & Blinders vs Martin Garrix ft. Macklemore & Patrick Stump of Fall Out Boy - Breach vs Summer Days (Martin Garrix Mashup)"},
-        {"start": (48, 51), "end": (50, 4), "title": "Julian Jordan - ID"},
-        {"start": (50, 5), "end": (51, 48), "title": "Matisse & Sadko - ID"},
-        {"start": (51, 49), "end": (54, 16), "title": "Alesso & Sentinel vs. Sander van Doorn & Martin Garrix & DVBBS & Aleesia - Interstellar vs. Gold Skies (Martin Garrix Mashup)"},
-        {"start": (54, 17), "end": (57, 29), "title": "Martin Garrix & JVKE vs Kx5 & Hayla & John Summit -- Hero (DubVision Remix) vs Escape (Martin Garrix Mashup)"},
-        {"start": (57, 30), "end": (60, 35), "title": "Martin Garrix & Bebe Rexha vs Martin Garrix & Blinders - In The Name Of Love vs Aurora (Martin Garrix Mashup)"},
-        {"start": (60, 36), "end": (62, 21), "title": "Martin Garrix & DubVision feat. Jordan Grace - Oxygen"},
-        {"start": (62, 22), "end": (65, 9), "title": "Martin Garrix & Third Party feat. Oaks & Declan J Donovan - Carry You"},
-        {"start": (65, 10), "end": (69, 41), "title": "Martin Garrix & DubVision feat. Shaun Farrugia - Wherever You Are (ID) (Outro Edit)"}
+    excelFile = pandas.read_excel("C:\\Users\\kamil\\OneDrive\\Documents\\Academic\\University Of Portsmouth\\Year 1\\audioSplitter\\garrixUltraMiami2024.xlsx")
+
+    trimTimings = []
+
+    trimTimingsManual = [
+        # {"start": (0, 0), "end": (2, 19), "title": "Martin Garrix & DubVision feat. Jaimes - Empty (Intro Edit)"},
+        # {"start": (2, 20), "end": (3, 49), "title": "ID - ID"},
+        # {"start": (3, 50), "end": (5, 19), "title": "Martin Garrix & Matisse & Sadko - Good Morning"},
+        # {"start": (5, 20), "end": (8, 46), "title": "Martin Garrix & MOTI - Virus"},
+        # {"start": (8, 47), "end": (11, 38), "title": "Eleganto - Express Yourself (ID)"},
+        # {"start": (11, 39), "end": (12, 53), "title": "070 Shakes - Cocoon (Martin Garrix & Space Ducks Remix)"},
+        # {"start": (12, 54), "end": (14, 44), "title": "Martin Garrix & Third Party - Lions In The Wild"},
+        # {"start": (14, 45), "end": (16, 29), "title": "Martin Garrix & Sentinal feat. Bonn vs Avicii - Hurricane vs Fade Into Darkness (Martin Garrix Mashup)"},
+        # {"start": (16, 30), "end": (18, 6), "title": "Martin Garrix & Third Party - Something To Believe In (ID)"},
+        # {"start": (18, 7), "end": (21, 45), "title": "Lewis Capaldi - Someone You Loved (Martin Garrix Remix)"},
+        # {"start": (21, 46), "end": (24, 36), "title": "Martin Garrix & Mesto feat. WILHELM - Breakaway"},
+        # {"start": (24, 37), "end": (26, 21), "title": "Martin Garrix & Zedd - Follow"},
+        # {"start": (26, 22), "end": (28, 59), "title": "AREA21 - Drinks Up (ID)"},
+        # {"start": (29, 0), "end": (31, 25), "title": "ALOK & The Chainsmokers ft. Mae Stephens vs Martin Garrix & Dua Lipa - Jungle (Arcando Remix) vs Scared To Be Lonely (Martin Garrix Mashup)"},
+        # {"start": (31, 26), "end": (32, 35), "title": "Martin Garrix & Mesto - Limitless"},
+        # {"start": (32, 36), "end": (34, 56), "title": "Avicii - Waiting For Love"},
+        # {"start": (34, 57), "end": (36, 33), "title": "Martin Garrix & DubVision feat. Shaun Farrugia - Starlight (Keep Me Afloat)"},
+        # {"start": (36, 34), "end": (40, 27), "title": "Martin Garrix feat. Bonn - High On Life"},
+        # {"start": (40, 28), "end": (42, 41), "title": "Dimitri Vegas, Martin Garrix, Like Mike - Tremor"},
+        # {"start": (42, 42), "end": (44, 55), "title": "Martin Garrix & Sem Vox - Gravity"},
+        # {"start": (44, 56), "end": (46, 17), "title": "Martin Garrix - Animals"},
+        # {"start": (46, 18), "end": (48, 50), "title": "Martin Garrix & Blinders vs Martin Garrix ft. Macklemore & Patrick Stump of Fall Out Boy - Breach vs Summer Days (Martin Garrix Mashup)"},
+        # {"start": (48, 51), "end": (50, 4), "title": "Julian Jordan - ID"},
+        # {"start": (50, 5), "end": (51, 48), "title": "Matisse & Sadko - ID"},
+        # {"start": (51, 49), "end": (54, 16), "title": "Alesso & Sentinel vs. Sander van Doorn & Martin Garrix & DVBBS & Aleesia - Interstellar vs. Gold Skies (Martin Garrix Mashup)"},
+        # {"start": (54, 17), "end": (57, 29), "title": "Martin Garrix & JVKE vs Kx5 & Hayla & John Summit -- Hero (DubVision Remix) vs Escape (Martin Garrix Mashup)"},
+        # {"start": (57, 30), "end": (60, 35), "title": "Martin Garrix & Bebe Rexha vs Martin Garrix & Blinders - In The Name Of Love vs Aurora (Martin Garrix Mashup)"},
+        # {"start": (60, 36), "end": (62, 21), "title": "Martin Garrix & DubVision feat. Jordan Grace - Oxygen"},
+        # {"start": (62, 22), "end": (65, 9), "title": "Martin Garrix & Third Party feat. Oaks & Declan J Donovan - Carry You"},
+        # {"start": (65, 10), "end": (69, 41), "title": "Martin Garrix & DubVision feat. Shaun Farrugia - Wherever You Are (ID) (Outro Edit)"}
         
     #     {"start": (0, 0), "end": (2, 15), "title": "Martin Garrix & DubVision ft. Jaimes - Empty (Intro Edit)"},
     #     {"start": (2, 16), "end": (4, 46), "title": "Matisse & Sadko & Sentinel - Once Again w/"},
@@ -70,6 +76,14 @@ def main():
     #     {"start": (62, 19), "end": (65, 9), "title": "Martin Garrix & Blinders vs. Martin Garrix ft. Shaun Farrugia - Starlight (Keep Me Afloat) w/"},
     #     {"start": (65, 10), "end": (69, 40), "title": "Martin Garrix ft. Bonn - High On Life (Acoustic) (PLEASE RELEASE MARTY<3)"}
     ]
+
+    for index, row in excelFile.iterrows():
+        entry = {
+            "start": (int(row['startOne']), int(row['startTwo'])),
+            "end": (int(row['endOne']), int(row['endTwo'])),
+            "title": f"{row['title']}"
+        }
+        trimTimings.append(entry)
     
     outputDirectory = "E:\\Music"
     os.makedirs(outputDirectory, exist_ok=True)
